@@ -93,63 +93,39 @@ public class TheGameOfLife {
      */
     static int row = 0;
     static int col = 0;
-    static boolean[][] oldBoard;
-    static boolean[][] newBoard;
+    public static boolean[][] board = new boolean[10][10];
+    private static boolean[][] copyBoard= new boolean[10][10];;
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner in = new Scanner(System.in);
-
+        System.out.println("input rows + columns");
+        row = in.nextInt();
+        col = in.nextInt();
+        System.out.println("input grid (1 = true) (0 = false)");
+        board = new boolean[row][col];
         readInput(in);
         checkNeighbors();
-        //lonely();
-        //crowded();
-        //birth();
-        //System.out.println(Arrays.deepToString(oldBoard));
-        //System.out.println(Arrays.deepToString(newBoard));
-        //temporary
-        System.out.println(Arrays.deepToString(oldBoard));
-        System.out.println(Arrays.deepToString(newBoard));
         outputArray();
     }
 
     public static void readInput(Scanner in) {
         String boardRows = "";
-        System.out.println("input grid (1 = true) (0 = false)");
-        row = in.nextInt();
-        col = in.nextInt();
-        oldBoard = new boolean[row][col];
-        newBoard = new boolean[row][col];
-        //takes in "\n"
         in.nextLine();
         for (int i = 0; i < row; i++) {
             boardRows = in.nextLine();
             for (int j = 0; j < col; j++) {
                 if (boardRows.charAt(j) == '1') {
-                    oldBoard[i][j] = true;
+                    board[i][j] = true;
                 }
             }
         }
-        //System.out.println(Arrays.deepToString(oldBoard));
-        /*int setRow = 0;
-        int setCol = 0;
-        String input = in.nextLine();
-        String[] coordinates = new String[2];
-        while (!input.equals("stop")) {
-            coordinates = input.split(" ");
-            setRow = Integer.parseInt(coordinates[0]);
-            setCol = Integer.parseInt(coordinates[1]);
-            oldBoard[setRow][setCol] = true;
-            input = in.nextLine();
-        }*/
-        return;
     }
 
     public static void outputArray() {
-        int[][] output = new int[row][col];
         System.out.println("your grid");
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                if (newBoard[i][j]) {
+                if (board[i][j]) {
                     System.out.print("1");
                 } else {
                     System.out.print("0");
@@ -167,74 +143,45 @@ public class TheGameOfLife {
                     continue;
                 } else {
                     try {
-                        if (oldBoard[i + a][j + b]) {
+                        if (copyBoard[i + a][j + b]) {
                             count++;
-                            //originally was in here
                         }
                     } catch (IndexOutOfBoundsException e) {
                         continue;
                     }
-                    //test this
-                    //count++;
                 }
             }
         }
-        //System.out.println(count);
-        //System.out.println(Arrays.deepToString(oldBoard));
         return count;
     }
 
     public static void checkNeighbors() {
+        copyBoard = Arrays.copyOf(board);
+        //copy board into copyBoard
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                copyBoard[i][j] = board[i][j];
+            }
+        }
         int count = 0;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 count = countCells(i, j);
-                if (oldBoard[i][j]) {
+                if (copyBoard[i][j]) {
                     if (count <= 1) {
-                        newBoard[i][j] = false;
+                        board[i][j] = false;
                     } else if (count >= 4) {
-                        newBoard[i][j] = false;
+                        board[i][j] = false;
                     }
                     else
                         //keeps true
-                        newBoard[i][j] = true;
+                        board[i][j] = true;
                 }
-                else if (!oldBoard[i][j] && count == 3) {
-                    newBoard[i][j] = true;
+                else if (!copyBoard[i][j] && count == 3) {
+                    board[i][j] = true;
 
                 }
             }
         }
-        return;
     }
-
-    /*public static void crowded() {
-        int count = 0;
-        for (int i = 0; i < present.length; i++) {
-            for (int j = 0; j < present.length; j++) {
-                if (past[i][j]) {
-                    count = countCells(i, j);
-                    if (count >= 4 && count <= 8) {
-                        past[i][j] = false;
-                    }
-                }
-            }
-        }
-        return;
-    }
-
-    public static void birth() {
-        int count = 0;
-        for (int i = 0; i < present.length; i++) {
-            for (int j = 0; j < present.length; j++) {
-                if (!past[i][j]) {
-                    count = countCells(i, j);
-                    if (count >= 2 && count <= 3) {
-                        past[i][j] = true;
-                    }
-                }
-            }
-        }
-        return;
-    }*/
 }
