@@ -91,18 +91,19 @@ public class TheGameOfLife {
     /**
      * @param args the command line arguments
      */
-    static int row = 0;
-    static int col = 0;
+    public static int row = 0;
+    public static int col = 0;
     public static boolean[][] board = new boolean[10][10];
     private static boolean[][] copyBoard= new boolean[10][10];;
+    
     public static void main(String[] args) {
         // TODO code application logic here
         Scanner in = new Scanner(System.in);
         System.out.println("input rows + columns");
         row = in.nextInt();
         col = in.nextInt();
-        System.out.println("input grid (1 = true) (0 = false)");
         board = new boolean[row][col];
+        System.out.println("input grid (1 = true) (0 = false)");
         readInput(in);
         checkNeighbors();
         outputArray();
@@ -156,7 +157,6 @@ public class TheGameOfLife {
     }
 
     public static void checkNeighbors() {
-        copyBoard = Arrays.copyOf(board);
         //copy board into copyBoard
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {

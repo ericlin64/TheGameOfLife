@@ -9,29 +9,58 @@
  * @author 349361337
  */
 import java.awt.Graphics;
-import java.awt.GridLayout;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import javax.swing.Timer;
+import thegameoflife.*;
+
 public class DrawingArea extends javax.swing.JPanel {
 
     /**
      * Creates new form DrawingArea
      */
-    int row = 10;
-    int col = 10;
-    
+    int row;
+    int col;
+
     public DrawingArea() {
         initComponents();
+        TheGameOfLife.row = row;
+        TheGameOfLife.col = col;
+        TheGameOfLife.board[1][1] = true;
+        TheGameOfLife.board[1][2] = true;
+        TheGameOfLife.board[1][3] = true;
     }
-    
+
     @Override
-    public void paintComponent(Graphics g){
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                g.drawRect(i*(getWidth()/row), j*(getHeight()/col), getWidth()/row, getHeight()/col);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                g.drawRect(i * (getWidth() / row), j * (getHeight() / col), getWidth() / row, getHeight() / col);
+                if (TheGameOfLife.board[i][j]) {
+                    g.fillRect(i * (getWidth() / row), j * (getHeight() / col), getWidth() / row, getHeight() / col);
+                }
             }
         }
     }
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    private class TimerListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            TheGameOfLife.checkNeighbors();
+            repaint();
+        }
+    }
     
+    public void anim() {
+        Timer t = new Timer(50, new TimerListener());
+        t.start();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
