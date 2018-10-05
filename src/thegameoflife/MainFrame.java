@@ -1,11 +1,12 @@
 package thegameoflife;
 
+import java.awt.MouseInfo;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author 349361337
@@ -17,6 +18,10 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+        TheGameOfLife.setupBoard(10, 10);
+        drawingArea1.repaint();
+        //System.out.println((this).getWidth());
+        //System.out.println(jTextField1.getWidth());
     }
 
     /**
@@ -28,22 +33,11 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        drawingArea2 = new DrawingArea();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        drawingArea1 = new thegameoflife.DrawingArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout drawingArea2Layout = new javax.swing.GroupLayout(drawingArea2);
-        drawingArea2.setLayout(drawingArea2Layout);
-        drawingArea2Layout.setHorizontalGroup(
-            drawingArea2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 455, Short.MAX_VALUE)
-        );
-        drawingArea2Layout.setVerticalGroup(
-            drawingArea2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,31 +52,48 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        drawingArea1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                drawingArea1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout drawingArea1Layout = new javax.swing.GroupLayout(drawingArea1);
+        drawingArea1.setLayout(drawingArea1Layout);
+        drawingArea1Layout.setHorizontalGroup(
+            drawingArea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 478, Short.MAX_VALUE)
+        );
+        drawingArea1Layout.setVerticalGroup(
+            drawingArea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(drawingArea2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addComponent(drawingArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                    .addComponent(jTextField1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(drawingArea2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addContainerGap(383, Short.MAX_VALUE))
+                .addContainerGap(378, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(drawingArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -90,16 +101,38 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-        drawingArea2.row = Integer.parseInt(jTextField1.getText());
-        drawingArea2.col = Integer.parseInt(jTextField1.getText());
-        drawingArea2.anim();
+        drawingArea1.row = Integer.parseInt(jTextField1.getText());
+        drawingArea1.col = Integer.parseInt(jTextField1.getText());
+        TheGameOfLife.setupBoard(drawingArea1.row, drawingArea1.col);
+        drawingArea1.repaint();
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         jButton2.setEnabled(false);
-        drawingArea2.anim();
+        drawingArea1.anim();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void drawingArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawingArea1MouseClicked
+        // TODO add your handling code here:
+        if (jButton2.isEnabled()) {
+            int mouseX = MouseInfo.getPointerInfo().getLocation().x;
+            int mouseY = MouseInfo.getPointerInfo().getLocation().y;
+            //System.out.println(mouseX);
+            //System.out.println(getHeight() / drawingArea1.row);
+            //System.out.println(mouseX/(drawingArea1.getHeight()/drawingArea1.row));
+            TheGameOfLife.checkCoordinate(mouseX,mouseY,drawingArea1.row,drawingArea1.col,drawingArea1.getWidth(),drawingArea1.getHeight());
+            //subtracts "1" because coordinates do not take in account that arrays start counting from "0"
+            /*int coordinateX = mouseX / (drawingArea1.getWidth() / drawingArea1.row) - 1;
+            int coordinateY = mouseY / (drawingArea1.getHeight() / drawingArea1.col) - 1;
+            if (!TheGameOfLife.board[coordinateX][coordinateY]) {
+                TheGameOfLife.board[coordinateX][coordinateY] = true;
+            } else {
+                TheGameOfLife.board[coordinateX][coordinateY] = false;
+            }*/
+            drawingArea1.repaint();
+        }
+    }//GEN-LAST:event_drawingArea1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -115,7 +148,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private DrawingArea drawingArea2;
+    private thegameoflife.DrawingArea drawingArea1;
     private javax.swing.JButton jButton2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
