@@ -1,27 +1,27 @@
 package thegameoflife;
 
-import java.awt.MouseInfo;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
+ * This program is called "Game of Life"
  *
- * @author 349361337
+ * @author Eric Lin
+ * @course ICS4U
+ *
+ * The MainFrame class contains all swing components and calls the other classes
+ * upon events happening within swing components.
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainFrame
-     */
+    //stores the speed at which anim animates
+    int speed = 100;
+    
     public MainFrame() {
         initComponents();
-        TheGameOfLife.setupBoard(10, 10);
-        drawingArea1.repaint();
-        //System.out.println((this).getWidth());
-        //System.out.println(jTextField1.getWidth());
+        //sets a default grid at the start of the program
+        Engine.setupBoard(10, 10);
+        drawingArea.repaint();
+        //StopButton should be disabled at the beginning of the program
+        jStopButton.setEnabled(false);
     }
 
     /**
@@ -33,41 +33,79 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        drawingArea1 = new thegameoflife.DrawingArea();
+        jTextField = new javax.swing.JTextField();
+        jStartButton = new javax.swing.JButton();
+        drawingArea = new thegameoflife.DrawingArea();
+        jStopButton = new javax.swing.JButton();
+        jPatternComboBox = new javax.swing.JComboBox<>();
+        jTestButton = new javax.swing.JButton();
+        jSpeedComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jTextField.setText("Enter Width");
+        jTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldMousePressed(evt);
+            }
+        });
+        jTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldKeyReleased(evt);
+            }
+        });
+
+        jStartButton.setText("Start");
+        jStartButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                jStartButtonActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Start");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        drawingArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                drawingAreaMousePressed(evt);
             }
         });
 
-        drawingArea1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                drawingArea1MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout drawingArea1Layout = new javax.swing.GroupLayout(drawingArea1);
-        drawingArea1.setLayout(drawingArea1Layout);
-        drawingArea1Layout.setHorizontalGroup(
-            drawingArea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+        javax.swing.GroupLayout drawingAreaLayout = new javax.swing.GroupLayout(drawingArea);
+        drawingArea.setLayout(drawingAreaLayout);
+        drawingAreaLayout.setHorizontalGroup(
+            drawingAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 473, Short.MAX_VALUE)
         );
-        drawingArea1Layout.setVerticalGroup(
-            drawingArea1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        drawingAreaLayout.setVerticalGroup(
+            drawingAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
+
+        jStopButton.setText("Stop");
+        jStopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jStopButtonActionPerformed(evt);
+            }
+        });
+
+        jPatternComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Clear", "Glider", "Flower", "Shuriken", "Ten", "Fireball", "Tumbler", "Glider Gun" }));
+        jPatternComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPatternComboBoxActionPerformed(evt);
+            }
+        });
+
+        jTestButton.setText("Test");
+        jTestButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTestButtonActionPerformed(evt);
+            }
+        });
+
+        jSpeedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Slow", "Fast" }));
+        jSpeedComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jSpeedComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,64 +113,183 @@ public class MainFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(drawingArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(drawingArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
-                .addContainerGap())
+                    .addComponent(jStartButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField)
+                    .addComponent(jStopButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPatternComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTestButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSpeedComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(378, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(drawingArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jStartButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jStopButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTestButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPatternComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpeedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 257, Short.MAX_VALUE))
+                    .addComponent(drawingArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    /**
+     * When jStartButton is pressed, the "Start" button is disabled and all components but StopButton are disabled.
+     * anim is then called to begin animating the grid
+     * @param evt 
+     */
+    private void jStartButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jStartButtonActionPerformed
         // TODO add your handling code here:
-        drawingArea1.row = Integer.parseInt(jTextField1.getText());
-        drawingArea1.col = Integer.parseInt(jTextField1.getText());
-        TheGameOfLife.setupBoard(drawingArea1.row, drawingArea1.col);
-        drawingArea1.repaint();
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        jStartButton.setEnabled(false);
+        jStopButton.setEnabled(true);
+        jPatternComboBox.setEnabled(false);
+        jTestButton.setEnabled(false);
+        jSpeedComboBox.setEnabled(false);
+        //shouldn't do anything when "start" button is first pressed
+        //once the "stop" button has been pressed atleast once, pressing start again will set stopReqest to false meaning that the program can animate
+        drawingArea.stopRequested = false;
+        //anim is either called here first or in TestButton
+        drawingArea.anim(speed);
+    }//GEN-LAST:event_jStartButtonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * When drawingArea is clicked (left or right click), it records the coordinates where
+     * the panel was clicked (relative to the panel) and calls fillCell to fill or empty the cell clicked.
+     * If the cell clicked was already filled, it gets emptied. This happens vice-versa.
+     * @param evt 
+     */
+    private void drawingAreaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawingAreaMousePressed
         // TODO add your handling code here:
-        jButton2.setEnabled(false);
-        drawingArea1.anim();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void drawingArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_drawingArea1MouseClicked
-        // TODO add your handling code here:
-        if (jButton2.isEnabled()) {
-            int mouseX = MouseInfo.getPointerInfo().getLocation().x;
-            int mouseY = MouseInfo.getPointerInfo().getLocation().y;
-            //System.out.println(mouseX);
-            //System.out.println(getHeight() / drawingArea1.row);
-            //System.out.println(mouseX/(drawingArea1.getHeight()/drawingArea1.row));
-            TheGameOfLife.checkCoordinate(mouseX,mouseY,drawingArea1.row,drawingArea1.col,drawingArea1.getWidth(),drawingArea1.getHeight());
-            //subtracts "1" because coordinates do not take in account that arrays start counting from "0"
-            /*int coordinateX = mouseX / (drawingArea1.getWidth() / drawingArea1.row) - 1;
-            int coordinateY = mouseY / (drawingArea1.getHeight() / drawingArea1.col) - 1;
-            if (!TheGameOfLife.board[coordinateX][coordinateY]) {
-                TheGameOfLife.board[coordinateX][coordinateY] = true;
-            } else {
-                TheGameOfLife.board[coordinateX][coordinateY] = false;
-            }*/
-            drawingArea1.repaint();
+        //drawingArea can only have its cells changed if the program is not animating
+        if (jStartButton.isEnabled()) {
+            //gets the mouse coordinates relative to drawingArea
+            int mouseX = evt.getX();
+            int mouseY = evt.getY();
+            //calls fillCell and gives the mouse coordinates and the dimensions of drawingArea
+            Engine.fillCell(mouseX, mouseY, drawingArea.getWidth(), drawingArea.getHeight());
+            drawingArea.repaint();
         }
-    }//GEN-LAST:event_drawingArea1MouseClicked
+    }//GEN-LAST:event_drawingAreaMousePressed
+
+    /**
+     * jTextField is preset with an instruction telling the user to adjust the grid's number of 
+     * rows and columns in the text field. The grid will change according to the number (must-
+     * -be a number) put into the text field.
+     * @param evt 
+     */
+    private void jTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldKeyReleased
+        // TODO add your handling code here:
+        //drawingArea can only have its cells changed if the program is not animating
+        if (jStartButton.isEnabled()) {
+            //try and catch statement is used in case a letter is entered.
+            try {
+                //all text in the text field are string and must parsed into integers
+                Engine.row = Integer.parseInt(jTextField.getText());
+                Engine.col = Integer.parseInt(jTextField.getText());
+                //calls setupBoard to change the board accordingly
+                Engine.setupBoard(Engine.row, Engine.col);
+                drawingArea.repaint();
+            } 
+            //catches string that is not a number and does nothing with it
+            catch (NumberFormatException e) {
+            }
+        }
+    }//GEN-LAST:event_jTextFieldKeyReleased
+
+    /**
+     * Upon being clicked, the instructions in jTextField are erased.
+     * @param evt 
+     */
+    private void jTextFieldMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldMousePressed
+        // TODO add your handling code here:
+        jTextField.setText("");
+    }//GEN-LAST:event_jTextFieldMousePressed
+
+    /**
+     * When jStopButton is pressed, all previously disabled components are re-enabled. The board is cleared and anim is stopped
+     * @param evt 
+     */
+    private void jStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jStopButtonActionPerformed
+        // TODO add your handling code here:
+        jStartButton.setEnabled(true);
+        jStopButton.setEnabled(false);
+        jPatternComboBox.setEnabled(true);
+        jTestButton.setEnabled(true);
+        jSpeedComboBox.setEnabled(true);
+        //stopRequest is responsible for stopping the program from animating. The next time TimerListener runs actionPerformed, the program will stop
+        drawingArea.stopRequested = true;
+        drawingArea.repaint();
+    }//GEN-LAST:event_jStopButtonActionPerformed
+
+    /**
+     * jPatternComboBoxActionPerformed gets the pattern in jPatternBox and calls setPattern to set the pattern in board. 
+     * A special exception is when "Glider Gun" is chosen. Because it covers a large amount of space, the method initializes board to a 50 row by 50
+     * column grid rather than the 25 row by 25 grid for every other pattern.
+     * @param evt 
+     */
+    private void jPatternComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPatternComboBoxActionPerformed
+        // TODO add your handling code here:
+        //if the pattern chosen is "Glider Gun", initialize grid to 50 by 50, else initialize it to 25 by 25
+        if(String.valueOf(jPatternComboBox.getSelectedItem()).equals("Glider Gun"))
+            Engine.setupBoard(50, 50);
+        else
+            Engine.setupBoard(25, 25);
+        //call setPattern and give the name of the pattern
+        Engine.setPattern(String.valueOf(jPatternComboBox.getSelectedItem()));
+        repaint();
+    }//GEN-LAST:event_jPatternComboBoxActionPerformed
+
+    /**
+     * jTestButton update the board once so that users and testers can see how the Game of Life algorithm works
+     * @param evt 
+     */
+    private void jTestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTestButtonActionPerformed
+        // TODO add your handling code here:
+        //checkNeighbors is usually called in TimerListener. However we only need to run it once so we call it from here.
+        Engine.checkNeighbors();
+        repaint();
+    }//GEN-LAST:event_jTestButtonActionPerformed
+
+    /**
+     * 
+     * @param evt 
+     */
+    /**
+     * jSpeedComboBox lists the options for how fast the user wants the board to animate. It uses a switch statement to determine the 3 conditions.
+     * The value of speed represents time in milliseconds which is how the program waits before updating and drawing the board again.
+     * @param evt 
+     */
+    private void jSpeedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSpeedComboBoxActionPerformed
+        // TODO add your handling code here:
+        switch(String.valueOf(jSpeedComboBox.getSelectedItem())){
+            case "Normal":
+                speed = 100;
+                break;
+            case "Slow":
+                speed = 250;
+                break;
+            case "Fast":
+                speed = 30;
+                break;
+        }
+    }//GEN-LAST:event_jSpeedComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -141,6 +298,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new MainFrame().setVisible(true);
             }
@@ -148,8 +306,12 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private thegameoflife.DrawingArea drawingArea1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JTextField jTextField1;
+    private thegameoflife.DrawingArea drawingArea;
+    private javax.swing.JComboBox<String> jPatternComboBox;
+    private javax.swing.JComboBox<String> jSpeedComboBox;
+    private javax.swing.JButton jStartButton;
+    private javax.swing.JButton jStopButton;
+    private javax.swing.JButton jTestButton;
+    private javax.swing.JTextField jTextField;
     // End of variables declaration//GEN-END:variables
 }

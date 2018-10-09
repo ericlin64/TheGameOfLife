@@ -1,59 +1,95 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package thegameoflife;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import javax.swing.Timer;
 
 public class DrawingArea extends javax.swing.JPanel {
 
     /**
-     * Creates new form DrawingArea
+     * This program is called "Game of Life"
+     *
+     * @author Eric Lin
+     * @course ICS4U
+     *
+     * The DrawingArea class draws board as well as when board updates
      */
-    int row = 10;
-    int col = 10;
-
+    
+    boolean stopRequested = false;
+    
     public DrawingArea() {
         initComponents();
+        //gets the default dimensions for the grid at the start of the program
     }
 
+    /**
+     * paintComponent does all the drawing in the program. Given the number of rows and columns, it draws all the cells of board
+     * @param g 
+     */
     @Override
     public void paintComponent(Graphics g) {
+        //action should paint over old drawings
+        //try removing this and testing the program to see what I mean
         super.paintComponent(g);
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                g.drawRect(i * (getWidth() / row), j * (getHeight() / col), getWidth() / row, getHeight() / col);
-                if (TheGameOfLife.board[i][j]) {
-                    g.fillRect(i * (getWidth() / row), j * (getHeight() / col), getWidth() / row, getHeight() / col);
+        
+        //loops through rows in board
+        //draws rectangles vertically
+        for (int i = 0; i < Engine.row; i++) {
+            
+            //loops througn columns in board
+            //draws rectangles horizontally
+            for (int j = 0; j < Engine.col; j++) {
+                
+                //draws each cell as a rectangle
+                //does getWidth()/col since both variables deal with the x-axis
+                //does getHeight()/row since both variables deal with the y-axis
+                g.drawRect(j * (getWidth() / Engine.col), i * (getHeight() / Engine.row), getWidth() / Engine.col, getHeight() / Engine.row);
+                //if the cell is occupied, fill the square to represent the cell getting occupied
+                if (Engine.board[i][j]) {
+                    //draws solid rectangles
+                    //follows the same action as g.drawRect()
+                    g.fillRect(j * (getWidth() / Engine.col), i * (getHeight() / Engine.row), getWidth() / Engine.col, getHeight() / Engine.row);
                 }
             }
         }
     }
-
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
+    
     private class TimerListener implements ActionListener {
-
+        /**
+         * actionPerformed begins updating and animating board. The method stops the program if it contains no cells or had the
+         * "stop" button pressed, otherwise it checks for neighbors, updates board accordingly, and continues animating.
+         * @param e 
+         */
+        @Override
         public void actionPerformed(ActionEvent e) {
-            TheGameOfLife.checkNeighbors();
+            //checks stopRequested to see if the "stop" button was pressed
+            if(stopRequested)
+                ((Timer)e.getSource()).stop();
+            //calls checkEmpty to check if board is empty
+            //as long as board is not empty, the program continues animating
+            if(!Engine.checkEmpty()){
+            //calls checkNeighbors to check and update board
+            Engine.checkNeighbors();
+            //calls paintComponent to repaint new board
             repaint();
+            }
+            //if board is empty, console prints that all cells are dead and timer t1 is stopped
+            else{
+                //message printed in console to tell the user that anim is no longer running
+                System.out.println("All cells are dead.");
+                //stops the timer
+                ((Timer)e.getSource()).stop();
+            }
         }
     }
     
-    public void anim() {
-        Timer t = new Timer(100, new TimerListener());
-        //TheGameOfLife.setupBoard(10,10);
-        /*TheGameOfLife.board[1][1] = true;
-        TheGameOfLife.board[1][2] = true;
-        TheGameOfLife.board[1][3] = true;*/
+    /**
+     * anim is called by MainFrame to begin animating board. anim constantly updates board until it is called to stop
+     */
+    public void anim(int speed) {
+        //Timer class animates the program
+        Timer t = new Timer(speed, new TimerListener());
+        //starst the timer
         t.start();
     }
     /**
